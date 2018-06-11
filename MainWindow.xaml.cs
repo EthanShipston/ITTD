@@ -1,4 +1,4 @@
-﻿/*Keegan Chan
+/*Keegan Chan and Ethan Shipston
  * 6 6 2018
  * ITTD
  * A multiplayer side shooter game*/
@@ -54,17 +54,41 @@ namespace ITTD
             gameTimer.Tick += gameTimer_Tick;
             gameTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000 / 60);//fps
             gameTimer.Start();
+            gameState = GameState.SplashScreen;
 
             //place character
-            P1Start.X = 10;
+            P1Start.X = 0;
             P1Start.Y = 10;
             Player.createPlayer(canvas, P1Start, 1);
+
         }
+
+        private void setupGame()
+        {
+            Background map = new Background();
+            map.drawMap1(canvas);
+            gameState = GameState.GameOn;
+        }
+
         private void gameTimer_Tick(object sender, EventArgs e)
         {
             counterTimer++;
+
+            if (gameState == GameState.SplashScreen)
+            {
+                setupGame();
+            }
+            if (gameState == GameState.GameOn)
+            {
+
+            }
+            if (gameState == GameState.GameOver)
+            {
+
+            }
+
             if (counterTimer % 2 == 0)
-            { 
+            {
                 if (playerMomentum < 0)
                 {
                     playerMomentum++;
@@ -76,6 +100,14 @@ namespace ITTD
             }
 
             playerMoving += playerMomentum;
+            if (playerMovementX < 0)
+            {
+                playerMoving = 770;
+            }
+            if (playerMoving > 770)
+            {
+                playerMoving = 0;
+            }
             playerMovementX = P1Start.X + playerMoving;
             Player.update(playerMovementX);
         }
@@ -91,7 +123,7 @@ namespace ITTD
             {
                 playerMomentum++;
             }
-            
+
         }
     }
 }
